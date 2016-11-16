@@ -1,30 +1,34 @@
 'use strict';
 
-var path = require('path');
-var defaultsDeep = require('lodash.defaultsdeep');
 var autoprefixer = require('gulp-autoprefixer');
-var notifier = require('node-notifier');
-var sourcemaps = require('gulp-sourcemaps');
-var filter = require('gulp-filter');
-var sass = require('gulp-sass');
-var watch = require('gulp-watch');
-var del = require('del');
-var gulpif = require('gulp-if');
 var changed = require('gulp-changed');
+var defaultsDeep = require('lodash.defaultsdeep');
+// @todo: While the deleting feature is nice, sometimes destination folder can contain other files too.
+//var del = require('del');
+var filter = require('gulp-filter');
+var gulpif = require('gulp-if');
+var notifier = require('node-notifier');
+var path = require('path');
+var sass = require('gulp-sass');
+var sassGlob = require('gulp-sass-glob');
+var sourcemaps = require('gulp-sourcemaps');
+var watch = require('gulp-watch');
 
 module.exports = function (gulp, gulpConfig) {
 
-  gulpConfig = gulpConfig || { basePath: '.' };
+  gulpConfig = gulpConfig || {};
 
   // Merge default config with gulp config.
   var defaultConfig = {
     stylesheets: {
-      src: '/sass/**/*.scss',
-      dest: '/css',
+      files : [
+        {
+          src: './sass/**/*.scss',
+          dest: './css'
+        }
+      ],
       sassOptions: {
-        includePaths: [
-          path.join(gulpConfig.basePath, '/vendor')
-        ]
+        outputStyle: 'expanded'
       },
       autoprefixerOptions: {
         browsers: ['last 2 versions'],
@@ -42,58 +46,73 @@ module.exports = function (gulp, gulpConfig) {
 
   // Default watch task.
   gulp.task('sass-watch', function () {
-    watch(path.join(config.basePath, config.stylesheets.src))
-      .on('change', function(path) {
-        gulp.start('sass');
-      })
-      .on('add', function(path) {
-        this.close();
-        gulp.start('sass-watch');
-      })
-      .on('unlink', function(filepath) {
-        del(path.join(gulpConfig.basePath, config.stylesheets.dest));
-        gulp.start('sass');
-      });
+    for (var key in config.stylesheets.files) {
+      watch(config.stylesheets.files[key].src)
+        .on('change', function(path) {
+          gulp.start('sass');
+        })
+        .on('add', function(path) {
+          this.close();
+          gulp.start('sass-watch');
+        })
+        .on('unlink', function(filepath) {
+          // @todo: While the deleting feature is nice, sometimes destination folder can contain other files too.
+          // del(config.stylesheets.dest);
+          gulp.start('sass');
+        });
+    }
   });
 
   // SASS with sourcemaps.
   gulp.task('sass', function () {
-    return gulp.src(path.join(config.basePath, config.stylesheets.src))
-      .pipe(sourcemaps.init())
-      .pipe(changed(path.join(config.basePath, config.stylesheets.dest), {extension: '.css'}))
-      .pipe(filter(function (file) {
-        return !/^_/.test(path.basename(file.path));
-      }))
-      .pipe(sass(config.stylesheets.sassOptions).on('error', sass.logError))
-      .pipe(autoprefixer(config.stylesheets.autoprefixerOptions))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest(path.join(config.basePath, config.stylesheets.dest)))
-      .pipe(gulpif(config.browserSync !== false, config.browserSync.stream({match: "**/*.css"})))
-      .on('end', function () {
-        notifier.notify({
-          title: config.stylesheets.notify.title,
-          message: config.stylesheets.notify.message,
-          icon: config.notify.successIcon,
-          sound: false
+    for (var key in config.stylesheets.files) {
+      gulp.src(config.stylesheets.files[key].src)
+        .pipe(sassGlob())
+        .pipe(sourcemaps.init())
+        // @todo: what does this do?
+        //.pipe(changed(config.stylesheets.files[key].dest, {extension: '.css'}))
+        // @todo: what does this do?
+        //.pipe(filter(function (file) {
+        //  return !/^_/.test(path.basename(file.path));
+        //}))
+        .pipe(sass(config.stylesheets.sassOptions).on('error', sass.logError))
+        // @todo: activate in second phase.
+        //.pipe(autoprefixer(config.stylesheets.autoprefixerOptions))
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(config.stylesheets.files[key].dest))
+        // @todo: fix browsersync.
+        //.pipe(gulpif(config.browserSync !== false, config.browserSync.stream({match: "**/*.css"})))
+        .on('end', function () {
+          notifier.notify({
+            title: config.stylesheets.notify.title,
+            message: config.stylesheets.notify.message,
+            sound: false
+          });
         });
-      });
+    }
   });
   // SASS for production without sourcemaps.
   gulp.task('sass-production', function () {
-    return gulp.src(path.join(config.basePath, config.stylesheets.src))
-      .pipe(filter(function (file) {
-        return !/^_/.test(path.basename(file.path));
-      }))
-      .pipe(sass(config.stylesheets.sassOptions).on('error', sass.logError))
-      .pipe(autoprefixer(config.stylesheets.autoprefixerOptions))
-      .pipe(gulp.dest(path.join(config.basePath, config.stylesheets.dest)))
-      .on('end', function () {
-        notifier.notify({
-          title: config.stylesheets.notify.title,
-          message: config.stylesheets.notify.message,
-          icon: config.notify.successIcon,
-          sound: false
+    for (var key in config.stylesheets.files) {
+      gulp.src(path.join(config.basePath, config.stylesheets.src))
+        .pipe(sassGlob())
+        // @todo: what does this do?
+        //.pipe(filter(function (file) {
+        //  return !/^_/.test(path.basename(file.path));
+        //}))
+        .pipe(sass(config.stylesheets.sassOptions).on('error', sass.logError))
+        // @todo: activate in second phase.
+        // .pipe(autoprefixer(config.stylesheets.autoprefixerOptions))
+        .pipe(gulp.dest(config.stylesheets.files[key].dest))
+        .on('end', function () {
+          notifier.notify({
+            title: config.stylesheets.notify.title,
+            message: config.stylesheets.notify.message,
+            // @todo: add icon?
+            //icon: config.notify.successIcon,
+            sound: false
+          });
         });
-      });
+    }
   });
 };
