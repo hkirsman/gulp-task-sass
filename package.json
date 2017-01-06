@@ -33,5 +33,7 @@
     "type": "git",
     "url": "git+https://github.com/hkirsman/gulp-task-sass.git"
   },
-  "version": "1.0.0"
+  "version": "1.0.1",
+  "os" : ["linux" ],
+  "engine": "node >= 6.4.1"
 }
