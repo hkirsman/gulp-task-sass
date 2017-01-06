@@ -1,8 +1,9 @@
 {
   "bugs": {
-    "url": "https://github.com/wunderkraut/gulp-task-sass/issues"
+    "url": "https://github.com/hkirsman/gulp-task-sass/issues"
   },
   "dependencies": {
+    "browser-sync": "^2.18.6",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
@@ -21,16 +22,16 @@
   "description": "A gulp task to compile sass files.",
   "devDependencies": {},
   "gitHead": "0891ab88edbbbdb665dd6d15ae80a3a1c981aff9",
-  "homepage": "https://github.com/wunderkraut/gulp-task-sass#readme",
+  "homepage": "https://github.com/hkirsman/gulp-task-sass#readme",
   "license": "MIT",
   "main": "index.js",
   "name": "gulp-task-sass",
   "optionalDependencies": {},
-  "readme": "Gulp task for SCSS style SASS compilation\n=================\n\n\n## Installation\n```sh\nnpm install --save-dev wunderkraut/gulp-task-sass\n```\n\n## Usage\n\n### Basic usage\n\n```js\n// Require gulp.\nvar gulp = require('gulp')\n\n// Require task module and pass gulp to provide the gulp tasks.\nrequire('gulp-task-sass')(gulp)\n```\n\n### Advanced usage\nYou can also pass a configuration to the task. This allows you to overwrite the default configuration and provide other configuration like a base path for your files.\n\n#### gulpfile.js\n```js\nvar gulp = require('gulp')\nvar gulpConfig = require('./gulpconfig')\n\n// Just pass the configuration object as second parameter.\nrequire('gulp-task-sass')(gulp, gulpConfig)\n```\n\n#### gulpconfig.js\n```js\nvar path = require('path');\n\nmodule.exports = {\n  // Basic configuration.\n  basePath: '.',\n\n  // Overwrite default configurations.\n  stylesheets: {\n    src: '/sass/**/*.scss',\n    dest: '/css',\n    sassOptions: {\n      includePaths: [\n        path.join(gulpConfig.basePath, '/vendor')\n      ]\n    },\n    autoprefixerOptions: {\n      browsers: ['last 2 versions'],\n      cascade: false\n    },\n    notify: {\n      title: 'YOURTITLE',\n      message: 'SASS compiled.'\n    }\n  }\n}\n```\n\n## Contributing\n\nPull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/wunderkraut/gulp-task-sass/issues/new).\n",
+  "readme": "Gulp task for SCSS style SASS compilation\n=================\n\n\n## Installation\n```sh\nnpm install --save-dev hkirsman/gulp-task-sass\n```\n\n## Usage\n\n### Basic usage\n\n```js\n// Require gulp.\nvar gulp = require('gulp')\n\n// Require task module and pass gulp to provide the gulp tasks.\nrequire('gulp-task-sass')(gulp)\n```\n\n### Advanced usage\nYou can also pass a configuration to the task. This allows you to overwrite the default configuration and provide other configuration like a base path for your files.\n\n#### gulpfile.js\n```js\nvar gulp = require('gulp')\nvar gulpConfig = require('./gulpconfig')\n\n// Just pass the configuration object as second parameter.\nrequire('gulp-task-sass')(gulp, gulpConfig)\n```\n\n#### gulpconfig.js\n```js\nvar path = require('path');\n\nmodule.exports = {\n  // Basic configuration.\n  basePath: '.',\n\n  // Overwrite default configurations.\n  stylesheets: {\n    src: '/sass/**/*.scss',\n    dest: '/css',\n    sassOptions: {\n      includePaths: [\n        path.join(gulpConfig.basePath, '/vendor')\n      ]\n    },\n    autoprefixerOptions: {\n      browsers: ['last 2 versions'],\n      cascade: false\n    },\n    notify: {\n      title: 'YOURTITLE',\n      message: 'SASS compiled.'\n    }\n  }\n}\n```\n\n## Contributing\n\nPull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/hkirsman/gulp-task-sass/issues/new).\n",
   "readmeFilename": "README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wunderkraut/gulp-task-sass.git"
+    "url": "git+https://github.com/hkirsman/gulp-task-sass.git"
   },
   "version": "1.0.0"
 }

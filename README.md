@@ -36,17 +36,15 @@ require('gulp-task-sass')(gulp, gulpConfig)
 var path = require('path');
 
 module.exports = {
-  // Basic configuration.
-  basePath: '.',
-
-  // Overwrite default configurations.
   stylesheets: {
-    src: '/sass/**/*.scss',
-    dest: '/css',
+    files : [
+      {
+        src: './sass/**/*.scss',
+        dest: './css'
+      }
+    ],
     sassOptions: {
-      includePaths: [
-        path.join(gulpConfig.basePath, '/vendor')
-      ]
+      outputStyle: 'expanded'
     },
     autoprefixerOptions: {
       browsers: ['last 2 versions'],
@@ -55,6 +53,13 @@ module.exports = {
     notify: {
       title: 'YOURTITLE',
       message: 'SASS compiled.'
+    }
+  },
+  browserSync: {
+    init: true,
+    browserSyncOptions: {
+      proxy: 'example.dev',
+      open: 'external'
     }
   }
 }

@@ -1,6 +1,8 @@
 'use strict';
 
 var autoprefixer = require('gulp-autoprefixer');
+var browserSync = require('browser-sync');
+var browserSyncReload = browserSync.reload;
 var changed = require('gulp-changed');
 var defaultsDeep = require('lodash.defaultsdeep');
 // @todo: While the deleting feature is nice, sometimes destination folder can contain other files too.
@@ -39,13 +41,23 @@ module.exports = function (gulp, gulpConfig) {
         message: 'SASS compiled.'
       }
     },
-    browserSync: false
+    browserSync: {
+      init: true,
+      browserSyncOptions: {
+        proxy: 'example.dev',
+        open: 'external'
+      }
+    }
   };
 
   var config = defaultsDeep(gulpConfig, defaultConfig);
 
   // Default watch task.
   gulp.task('sass-watch', function () {
+    // Init Browsersync here so we don't have to add it in main file.
+    // Only thing that is needed is to add browserSync.init = true.
+    gulp.start('browser-sync');
+
     for (var key in config.stylesheets.files) {
       watch(config.stylesheets.files[key].src)
         .on('change', function(path) {
@@ -80,8 +92,7 @@ module.exports = function (gulp, gulpConfig) {
         //.pipe(autoprefixer(config.stylesheets.autoprefixerOptions))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(config.stylesheets.files[key].dest))
-        // @todo: fix browsersync.
-        //.pipe(gulpif(config.browserSync !== false, config.browserSync.stream({match: "**/*.css"})))
+        .pipe(browserSyncReload({stream: true, match: '**/*.css'}))
         .on('end', function () {
           notifier.notify({
             title: config.stylesheets.notify.title,
@@ -91,6 +102,7 @@ module.exports = function (gulp, gulpConfig) {
         });
     }
   });
+
   // SASS for production without sourcemaps.
   gulp.task('sass-production', function () {
     for (var key in config.stylesheets.files) {
@@ -114,5 +126,10 @@ module.exports = function (gulp, gulpConfig) {
           });
         });
     }
+  });
+
+  // Init Browsersync.
+  gulp.task('browser-sync', function() {
+    browserSync(gulpConfig.browserSync.browserSyncOptions);
   });
 };
