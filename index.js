@@ -37,7 +37,7 @@ module.exports = function (gulp, gulpConfig) {
         cascade: false
       },
       notify: {
-        title: 'Wunderkraut',
+        title: 'Wunder',
         message: 'SASS compiled.'
       }
     },
