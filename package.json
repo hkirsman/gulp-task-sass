@@ -35,5 +35,8 @@
   },
   "version": "1.0.1",
   "os" : ["darwin", "linux"],
-  "engine": "node >= 6.4.1"
+  "engines" : {
+    "node" : ">=10.10.3",
+    "npm" : "~11.0.20"
+  }
 }
