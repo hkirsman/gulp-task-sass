@@ -37,7 +37,7 @@
   "os" : ["darwin", "linux"],
   "engineStrict" : true,
   "engines" : {
-    "node" : ">=5.10",
-    "npm" : ">=2.0.0"
+    "node" : ">=5.10.1",
+    "npm" : ">=3.8.4"
   }
 }
