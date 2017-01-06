@@ -4,7 +4,7 @@ Gulp task for SCSS style SASS compilation
 
 ## Installation
 ```sh
-npm install --save-dev wunderkraut/gulp-task-sass
+npm install --save-dev hkirsman/gulp-task-sass
 ```
 
 ## Usage
@@ -67,4 +67,4 @@ module.exports = {
 
 ## Contributing
 
-Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/wunderkraut/gulp-task-sass/issues/new).
+Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/hkirsman/gulp-task-sass/issues/new).
