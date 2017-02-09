@@ -34,7 +34,7 @@
     "url": "git+https://github.com/hkirsman/gulp-task-sass.git"
   },
   "version": "1.0.2",
-  "os" : ["darwin", "linux"],
+  "os" : ["darwin", "linux", "freebsd"],
   "engineStrict" : true,
   "engines" : {
     "node" : ">=5.10.1",
